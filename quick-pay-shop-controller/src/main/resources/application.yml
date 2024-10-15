@@ -1,0 +1,5 @@
+spring:
+  config:
+    name: quick-pay-shop
+  profiles:
+    active: dev
