@@ -7,6 +7,15 @@ server:
       min-spare: 10
     accept-count: 10
 
+# 微信公众号对接
+weixin:
+  config:
+    originalid: gh_d1bc5ca83fe5
+    token: b8b6
+    app-id: wx7561c3f0f1cdda0d
+    app-secret: 8944d126ac402c38434197cb603ebed9
+
+
 # 日志
 logging:
   level:
