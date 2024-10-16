@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ <trees>
+     <tree path="/quick-pay-shop-controller/src/main/java/cn/learn/controller/WeixinPortalController.java"
+           title="由微信平台进行调用"/>
+     <tree path="/quick-pay-shop-controller/src/main/java/cn/learn/controller/LoginController.java"
+           title="前端页面调用"/>
+     <tree path="/quick-pay-shop-service/src/main/java/cn/learn/service/weixin/IWeixinApiService.java"
+           title="调用微信平台接口"/>
+ </trees>

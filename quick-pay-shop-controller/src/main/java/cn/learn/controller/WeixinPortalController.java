@@ -1,12 +1,16 @@
 package cn.learn.controller;
 
-import cn.learn.common.MessageTextEntity;
-import cn.learn.common.SignatureUtil;
-import cn.learn.common.XmlUtil;
+import cn.learn.common.weixin.MessageTextEntity;
+import cn.learn.common.weixin.SignatureUtil;
+import cn.learn.common.weixin.XmlUtil;
+import cn.learn.service.ILoginService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * 微信服务对接：
@@ -25,6 +29,9 @@ public class WeixinPortalController {
     private String originalid;
     @Value("${weixin.config.token}")
     private String token;
+
+    @Resource
+    private ILoginService loginService;
 
     /**
      * 接口作用：微信公众号平台服务器进行开发者服务器的 URL 验证时调用的接口。
@@ -63,7 +70,7 @@ public class WeixinPortalController {
      * @param signature 签名
      * @param timestamp 时间戳
      * @param nonce 随机数
-     * @param openid 消息的发送者（用户）的 openid
+     * @param openid <strong>用于唯一标识该用户在该公众号中的身份</strong>
      * @param encType 标识消息是否加密
      * @param msgSignature 如果消息加密，则这个参数包含加密的签名，用于验证消息的完整性
      * @return 调用 buildMessageTextEntity() 方法，生成一个回复消息。
@@ -77,16 +84,26 @@ public class WeixinPortalController {
                        @RequestParam(name = "encrypt_type", required = false) String encType,
                        @RequestParam(name = "msg_signature", required = false) String msgSignature) {
         try {
-            log.info("接收微信公众号信息请求{}开始 {}", openid, requestBody);
+            log.info("接收微信公众号信息请求，openid:{} requestBody:{}", openid, requestBody);
             // 消息转换
             MessageTextEntity message = XmlUtil.xmlToBean(requestBody, MessageTextEntity.class);
-            return buildMessageTextEntity(openid, "不管你说什么我都要告诉你，你是宇宙无敌可爱小宝宝！");
+/*            // Jackson序列化对象
+            ObjectMapper objectMapper = new ObjectMapper();
+            log.info("message: {}", objectMapper.writeValueAsString(message));*/
+
+            if ("event".equals(message.getMsgType()) && "SCAN".equals(message.getEvent())) {
+                loginService.saveLoginState(message.getTicket(), openid);
+//                return buildMessageTextEntity(openid, "登录成功");
+            }
+
+            return buildMessageTextEntity(openid, "你好，" + message.getContent());
         } catch (Exception e) {
-            log.error("接收微信公众号信息请求{}失败 {}", openid, requestBody, e);
+            log.error("接收微信公众号信息请求{} 失败 {}", openid, requestBody, e);
             return "";
         }
     }
 
+    // 构建返回给微信公众号的消息，消息格式为xml
     private String buildMessageTextEntity(String openid, String content) {
         MessageTextEntity res = new MessageTextEntity();
         // 公众号分配的ID

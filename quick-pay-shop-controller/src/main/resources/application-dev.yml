@@ -12,6 +12,9 @@ weixin:
   config:
     originalid: gh_d1bc5ca83fe5
     token: b8b6
+    app-id: wx7561c3f0f1cdda0d
+    app-secret: 8944d126ac402c38434197cb603ebed9
+    template-id: P9hzrMYSthgjCgjjRcan_pEErBgUxYxuo3o11aCVRLE # 标题：登录成功
 
 # 日志
 logging:

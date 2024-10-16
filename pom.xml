@@ -127,6 +127,17 @@
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>3.26.0</version>
             </dependency>
+
+            <!-- note：retrofit2框架：-->
+            <!--  宏观上，可以认为 Retrofit 是目前使用广泛的 Http 网络请求框架，它适用于 Android 和 Java。-->
+            <!--  实际上，Retrofit 本身并不是一个网络请求框架，而是一个网络请求框架的封装。在 Retrofit 框架中，网络请求不是由 Retrofit 本身来操作的，而是由它的内核（2.x 版本默认内置为 OkHttp）来实现的：-->
+            <!--  上图就是使用 Retrofit 实现网络请求的流程：-->
+            <!--    · 首先应用层通过 Retrofit 层来封装请求参数，header，url 等信息-->
+            <!--    · Retrofit 通过 OkHttp 来完成后续的请求操作-->
+            <!--    · 服务端处理完请求后，将结果返回给OkHttp层-->
+            <!--    · OkHttp 层再将原始结果返回给 Retrofit 层，Retrofit 根据用户的需求对结果进行解析-->
+            <!--  Retrofit使得开发者能专注于请求接口的封装工作，网络请求的工作就交给了OkHttp。-->
+            <!--  <a href="https://www.cnblogs.com/liyutian/p/9696873.html">Retrofit 使用简介</a>-->
             <dependency>
                 <groupId>com.squareup.retrofit2</groupId>
                 <artifactId>retrofit</artifactId>
@@ -142,6 +153,7 @@
                 <artifactId>adapter-rxjava2</artifactId>
                 <version>2.9.0</version>
             </dependency>
+
             <!-- 支付宝沙箱支付对接文档：https://opendocs.alipay.com/common/02kkv7 -->
             <dependency>
                 <groupId>com.alipay.sdk</groupId>

@@ -1,4 +1,4 @@
-package cn.learn.common;
+package cn.learn.common.weixin;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Getter;
@@ -34,7 +34,7 @@ public class MessageTextEntity {
     @XStreamAlias("EventKey")
     private String eventKey;
 
-    @XStreamAlias("MsgId")
+    @XStreamAlias("MsgID")
     private String msgId;
 
     @XStreamAlias("Status")

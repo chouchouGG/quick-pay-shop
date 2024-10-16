@@ -1,4 +1,4 @@
-package cn.learn.common;
+package cn.learn.common.weixin;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;

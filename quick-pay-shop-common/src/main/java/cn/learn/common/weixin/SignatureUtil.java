@@ -1,4 +1,4 @@
-package cn.learn.common;
+package cn.learn.common.weixin;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
