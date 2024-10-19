@@ -1,6 +1,6 @@
 package cn.learn.service.weixin;
 
-import cn.learn.domain.po.WeixinTemplateMessageVO;
+import cn.learn.domain.vo.WeixinTemplateMessageVO;
 import cn.learn.domain.req.WeixinQrCodeReq;
 import cn.learn.domain.res.WeixinQrCodeRes;
 import cn.learn.domain.res.WeixinTokenRes;

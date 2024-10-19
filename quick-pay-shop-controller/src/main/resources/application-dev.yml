@@ -26,7 +26,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://117.72.77.81:13306
+    url: jdbc:mysql://117.72.77.81:13306/s-pay-mall
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialSize: 5
     minIdle: 5
@@ -41,3 +41,6 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     filters: stat
 
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  config-location:  classpath:/mybatis/config/mybatis-config.xml

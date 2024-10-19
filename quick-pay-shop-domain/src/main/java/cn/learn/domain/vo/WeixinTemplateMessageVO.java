@@ -1,4 +1,4 @@
-package cn.learn.domain.po;
+package cn.learn.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
