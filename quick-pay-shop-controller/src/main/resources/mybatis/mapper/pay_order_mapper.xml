@@ -34,9 +34,41 @@
         select product_id, product_name, order_id, order_time, total_amount, status, pay_url
         from pay_order
         where user_id = #{userId}
-          and status = 'PAY_WAIT' or status = 'CREATE'
+            and status = 'PAY_WAIT'
+           or status = 'CREATE'
         order by id desc
         limit 1
     </select>
+    <update id="changeOrderPaySuccess" parameterType="cn.learn.domain.po.PayOrder">
+        update pay_order
+        set status      = 'PAY_SUCCESS',
+            pay_time    = now(),
+            update_time = now()
+        where order_id = #{orderId}
+    </update>
+    <update id="changeOrderClose" parameterType="java.lang.String">
+        update pay_order
+        set status      = 'CLOSE',
+            pay_time    = now(),
+            update_time = now()
+        where order_id = #{orderId}
+    </update>
+    <select id="queryTimeoutCloseOrderList" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT order_id as orderId
+        FROM pay_order
+        WHERE status = 'PAY_WAIT'
+          AND NOW() >= order_time + INTERVAL 15 MINUTE
+        ORDER BY id ASC
+        LIMIT 50
+    </select>
+    <select id="queryNoPayNotifyOrder" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT order_id as orderId
+        FROM pay_order
+        WHERE status = 'PAY_WAIT'
+          AND NOW() >= order_time + INTERVAL 1 MINUTE
+        ORDER BY id ASC
+        LIMIT 10
+    </select>
+
 
 </mapper>

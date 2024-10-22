@@ -2,7 +2,8 @@ package cn.learn.service;
 
 import cn.learn.domain.req.ShopCartReq;
 import cn.learn.domain.res.PayOrderRes;
-import com.alipay.api.domain.Shop;
+
+import java.util.List;
 
 /**
  * @program: quick-pay-shop
@@ -16,6 +17,14 @@ public interface IOrderService {
      * 创建订单
      */
     PayOrderRes createOrder(ShopCartReq shopCartReq) throws Exception;
+
+    void changeOrderPaySuccess(String orderId);
+
+    List<String> queryNoPayNotifyOrder();
+
+    List<String> queryTimeoutCloseOrderList();
+
+    boolean changeOrderClose(String orderId);
 
 
 }

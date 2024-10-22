@@ -3,6 +3,8 @@ package cn.learn.dao;
 import cn.learn.domain.po.PayOrder;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @program: quick-pay-shop
  * @description:
@@ -17,4 +19,13 @@ public interface IOrderDao {
     PayOrder queryUnPayOrder(PayOrder payOrder);
 
     void updateOrderPayInfo(PayOrder payOrder);
+
+    void changeOrderPaySuccess(PayOrder order);
+
+    List<String> queryNoPayNotifyOrder();
+
+    List<String> queryTimeoutCloseOrderList();
+
+    boolean changeOrderClose(String orderId);
+
 }

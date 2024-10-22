@@ -31,7 +31,8 @@ public class AliPayController {
     private IOrderService orderService;
 
     /**
-     * http://localhost:8080/api/v1/alipay/create_pay_order
+     * 内部测试：http://localhost:8080/api/v1/alipay/create_pay_order
+     * 外部测试：http://chouchou1.natapp1.cc/api/v1/alipay/create_pay_order
      *
      * {
      *     "userId": "10001",
@@ -67,6 +68,7 @@ public class AliPayController {
     }
 
     /**
+     * <p>支付宝回调接口，通知业务方</p>
      * http://chouchou1.natapp1.cc/api/v1/alipay/alipay_notify_url
      */
     @PostMapping(value = "alipay_notify_url")
@@ -77,6 +79,7 @@ public class AliPayController {
             return "false";
         }
 
+        // fixme 当前的代码确实忽略了参数可能是数组的情况，只取了第一个值。
         Map<String, String> params = new HashMap<>();
         Map<String, String[]> requestParams = request.getParameterMap();
         for (String name : requestParams.keySet()) {
@@ -86,10 +89,11 @@ public class AliPayController {
         String tradeNo = params.get("out_trade_no");
         String gmtPayment = params.get("gmt_payment");
         String alipayTradeNo = params.get("trade_no");
-
         String sign = params.get("sign");
+
         String content = AlipaySignature.getSignCheckContentV1(params);
-        boolean checkSignature = AlipaySignature.rsa256CheckContent(content, sign, alipayPublicKey, "UTF-8"); // 验证签名
+        // 验证签名
+        boolean checkSignature = AlipaySignature.rsa256CheckContent(content, sign, alipayPublicKey, "UTF-8");
         // 支付宝验签
         if (!checkSignature) {
             return "false";
@@ -104,6 +108,9 @@ public class AliPayController {
             log.info("支付回调，买家付款时间: {}", params.get("gmt_payment"));
             log.info("支付回调，买家付款金额: {}", params.get("buyer_pay_amount"));
             log.info("支付回调，支付回调，更新订单 {}", tradeNo);
+
+            // 修改订单状态
+            orderService.changeOrderPaySuccess(tradeNo);
 
             return "success";
         }

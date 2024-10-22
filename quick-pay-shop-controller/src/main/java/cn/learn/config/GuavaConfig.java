@@ -1,7 +1,9 @@
 package cn.learn.config;
 
+import cn.learn.listener.OrderPaySuccessListener;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.eventbus.EventBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,7 +24,7 @@ public class GuavaConfig {
     /**
      * 用于存储微信的 AccessToken，缓存中存储的值在写入后的 2 小时内有效。
      */
-    @Bean
+    @Bean("weixinAccessTokenCache")
     public Cache<String, String> weixinAccessTokenCache() {
         return CacheBuilder.newBuilder()
                 .expireAfterWrite(2, TimeUnit.HOURS)
@@ -32,11 +34,18 @@ public class GuavaConfig {
     /**
      * 用于存储 OpenID Token，缓存中的值在写入后的 1 小时内有效。
      */
-    @Bean
+    @Bean("openidTokenCache")
     public Cache<String, String> openidTokenCache() {
         return CacheBuilder.newBuilder()
                 .expireAfterWrite(1, TimeUnit.HOURS)
                 .build();
+    }
+
+    @Bean("eventBusListener")
+    public EventBus eventBusListener(OrderPaySuccessListener listener) {
+        EventBus eventBus = new EventBus();
+        eventBus.register(listener);
+        return eventBus;
     }
 
 }
