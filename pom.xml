@@ -122,11 +122,11 @@
                 <artifactId>commons-codec</artifactId>
                 <version>1.15</version>
             </dependency>
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>3.26.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.redisson</groupId>-->
+<!--                <artifactId>redisson-spring-boot-starter</artifactId>-->
+<!--                <version>3.26.0</version>-->
+<!--            </dependency>-->
 
             <!-- note：retrofit2框架：-->
             <!--  宏观上，可以认为 Retrofit 是目前使用广泛的 Http 网络请求框架，它适用于 Android 和 Java。-->
