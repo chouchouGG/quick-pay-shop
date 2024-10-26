@@ -34,8 +34,11 @@ public class MessageTextEntity {
     @XStreamAlias("EventKey")
     private String eventKey;
 
-    @XStreamAlias("MsgId")
+    @XStreamAlias("MsgID")  // 微信扫码登录使用
     private String msgId;
+
+    @XStreamAlias("MsgId")  // 普通消息使用
+    private String msgIdAlias;
 
     @XStreamAlias("Status")
     private String status;

@@ -93,7 +93,7 @@ public class WeixinPortalController {
 
             return buildMessageTextEntity(openid, "你好，" + message.getContent());
         } catch (Exception e) {
-            log.error("接收微信公众号信息请求{} 失败 {}", openid, requestBody, e);
+            log.error("接收微信公众号信息请求，openid:{} 失败 {}", openid, requestBody, e);
             return "";
         }
     }

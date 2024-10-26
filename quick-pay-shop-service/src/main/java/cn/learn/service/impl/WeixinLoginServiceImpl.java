@@ -1,9 +1,9 @@
 package cn.learn.service.impl;
 
-import cn.learn.domain.vo.WeixinTemplateMessageVO;
 import cn.learn.domain.req.WeixinQrCodeReq;
 import cn.learn.domain.res.WeixinQrCodeRes;
 import cn.learn.domain.res.WeixinTokenRes;
+import cn.learn.domain.vo.WeixinTemplateMessageVO;
 import cn.learn.service.ILoginService;
 import cn.learn.service.weixin.IWeixinApiService;
 import com.google.common.cache.Cache;
@@ -47,8 +47,8 @@ public class WeixinLoginServiceImpl implements ILoginService {
         // 1. 获取 Access Token
         String accessToken = fentchAccessToken();
 
-        // 2. 生成 Ticket
-        WeixinQrCodeReq weixinQrCodeReq = WeixinQrCodeReq.builder()
+        // 2. 生成二维码Ticket
+        Call<WeixinQrCodeRes> call2 = weixinApiService.createQrCode(accessToken, WeixinQrCodeReq.builder()
                 .expire_seconds(2592000) // 2592000是临时二维码最长可以设置的值。
                 .action_name(WeixinQrCodeReq.ActionNameTypeVO.QR_SCENE.getCode())
                 .action_info(WeixinQrCodeReq.ActionInfo.builder()
@@ -56,10 +56,8 @@ public class WeixinLoginServiceImpl implements ILoginService {
                                 .scene_id(100601) // 场景值ID，临时二维码时为 32位非 0整型
                                 .build())
                         .build())
-                .build();
-
-        // 3. 获取 QR Code
-        Call<WeixinQrCodeRes> call2 = weixinApiService.createQrCode(accessToken, weixinQrCodeReq);
+                .build()
+        );
         WeixinQrCodeRes weixinQrCodeRes = call2.execute().body();
         assert weixinQrCodeRes != null;
         return weixinQrCodeRes.getTicket();
@@ -108,7 +106,7 @@ public class WeixinLoginServiceImpl implements ILoginService {
                 if (weixinTokenRes == null) {
                     throw new NullPointerException("未能获取微信的 Access Token, HTTP 响应体为空");
                 }
-                // 获取并缓存 accessToken
+                // 从响应中获取accessToken，并缓存accessToken
                 accessToken = weixinTokenRes.getAccessToken();
                 weixinAccessTokenCache.put(appId, accessToken);
             } catch (IOException e) {
