@@ -11,7 +11,6 @@ import com.alipay.api.internal.util.AlipaySignature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.http.POST;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;

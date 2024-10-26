@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 
 /**
  * @program: quick-pay-shop
- * @description: 微信API服务接口
+ * @description: 调用微信API服务
  * @author: chouchouGG
  * @create: 2024-10-15 22:01
  **/
@@ -25,7 +25,7 @@ public interface IWeixinApiService {
      *
      * @param grantType 获取access_token填写client_credential
      * @param appId 第三方用户唯一凭证
-     * @param appSecret 第三方用户唯一凭证密钥，即appsecret
+     * @param appSecret 第三方用户唯一凭证密钥
      * @return 响应结果
      */
     @GET("cgi-bin/token")

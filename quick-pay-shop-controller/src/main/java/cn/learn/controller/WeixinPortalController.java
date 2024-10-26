@@ -4,7 +4,6 @@ import cn.learn.common.weixin.MessageTextEntity;
 import cn.learn.common.weixin.SignatureUtil;
 import cn.learn.common.weixin.XmlUtil;
 import cn.learn.service.ILoginService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 /**
- * 微信服务对接：
- * <p>
- * 资源路径：<a href="http://chouchou1.natapp1.cc/api/v1/weixin/portal/receive">/api/v1/weixin/portal/receive</a>
- * <p>
+ * 微信公众平台对接的服务端：
  * 完整URL：http://chouchou1.natapp1.cc/api/v1/weixin/portal/receive/
  */
 @Slf4j
@@ -34,12 +30,12 @@ public class WeixinPortalController {
     private ILoginService loginService;
 
     /**
-     * 接口作用：微信公众号平台服务器进行开发者服务器的 URL 验证时调用的接口。
-     * @param signature 微信服务器发送的签名
-     * @param timestamp 微信服务器发送的时间戳
+     * 接口作用：验证服务器地址url的有效性，微信公众平台进行配置URL和token时，自动发送GET请求到填写的URL上进行验证。
+     * @param signature
+     * @param timestamp
      * @param nonce 微信服务器发送的随机数
      * @param echostr 微信服务器发送的随机字符串
-     * @return 如果校验通过，则返回 echostr，确认服务器配置成功。
+     * @return 原样返回echostr参数内容，代表接入生效，否则接入失败。
      */
     @GetMapping(value = "receive", produces = "text/plain;charset=utf-8")
     public String validate(@RequestParam(value = "signature", required = false) String signature,
@@ -51,7 +47,10 @@ public class WeixinPortalController {
             if (StringUtils.isAnyBlank(signature, timestamp, nonce, echostr)) {
                 throw new IllegalArgumentException("请求参数非法，请核实!");
             }
-            boolean check = SignatureUtil.check(token, signature, timestamp, nonce);
+
+
+            boolean check = SignatureUtil.check(token, signature, timestamp, nonce); // 核心逻辑
+
             log.info("微信公众号验签信息完成 check：{}", check);
             if (!check) {
                 log.info("签名校验不通过，不继续处理", check);
@@ -65,12 +64,12 @@ public class WeixinPortalController {
     }
 
     /**
-     * 接口作用：处理来自微信服务器的消息，解析出消息内容后进行回复。（在这个例子中，回复的内容是用户发送的文本消息的内容。）
+     * 接口作用：接受微信公众号接受到的用户消息（微信公众号相当于是做了一个消息的转发）
      * @param requestBody 接收请求体的内容（即微信推送的消息）
-     * @param signature 签名
-     * @param timestamp 时间戳
+     * @param signature
+     * @param timestamp
      * @param nonce 随机数
-     * @param openid <strong>用于唯一标识该用户在该公众号中的身份</strong>
+     * @param openid 用于唯一标识该用户在该公众号中的身份。用户向公众号发送消息时，公众号方收到的消息发送者是一个OpenID，是使用用户微信号加密后的结果，每个用户对每个公众号有一个唯一的OpenID。
      * @param encType 标识消息是否加密
      * @param msgSignature 如果消息加密，则这个参数包含加密的签名，用于验证消息的完整性
      * @return 调用 buildMessageTextEntity() 方法，生成一个回复消息。
@@ -87,13 +86,9 @@ public class WeixinPortalController {
             log.info("接收微信公众号信息请求，openid:{} requestBody:{}", openid, requestBody);
             // 消息转换
             MessageTextEntity message = XmlUtil.xmlToBean(requestBody, MessageTextEntity.class);
-/*            // Jackson序列化对象
-            ObjectMapper objectMapper = new ObjectMapper();
-            log.info("message: {}", objectMapper.writeValueAsString(message));*/
 
             if ("event".equals(message.getMsgType()) && "SCAN".equals(message.getEvent())) {
                 loginService.saveLoginState(message.getTicket(), openid);
-//                return buildMessageTextEntity(openid, "登录成功");
             }
 
             return buildMessageTextEntity(openid, "你好，" + message.getContent());

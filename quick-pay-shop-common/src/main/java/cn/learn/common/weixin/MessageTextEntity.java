@@ -6,7 +6,7 @@ import lombok.Setter;
 
 /**
  * @program: quick-pay-shop
- * @description: 表示微信公众号消息实体的 Java 类
+ * @description: 与微信公众平台进行通信的消息实体
  * @author: chouchouGG
  * @create: 2024-10-15 12:29
  **/
@@ -34,7 +34,7 @@ public class MessageTextEntity {
     @XStreamAlias("EventKey")
     private String eventKey;
 
-    @XStreamAlias("MsgID")
+    @XStreamAlias("MsgId")
     private String msgId;
 
     @XStreamAlias("Status")
